@@ -36,15 +36,21 @@ int main() {
             thread_times.resize(nthreads, 0.0);
         }
 
-        double start = omp_get_wtime(); // Marca o tempo antes de cada thread começar
+        // Função do OpenMP que retorna o tempo atual em segundos
+        double start = omp_get_wtime(); 
 
-        // Cada thread faz uma parte do trabalho ao mesmo tempo
+        //  #pragma omp parallel for schedule(static):
+        //  Diretiva do OpenMP que paraleliza o loop for a seguir.
+        //  parallel for: divide as iteracoes do loop entre as threads disponiveis
+        //  schedule(static): distribui as iteracoes de forma fixa e igual entre as threads no inicio da execucao
+        //  Cada thread recebe um bloco continuo de iteracoes
         #pragma omp for schedule(static)
         for (int i = 0; i < N; ++i) {
             a[i] = pow(x[i], 2) + pow(y[i], 2) + pow(z[i], 2);
         }
 
-        double end = omp_get_wtime(); // Marca o tempo depois que cada thread termina
+        // Função do OpenMP que retorna o tempo atual em segundos
+        double end = omp_get_wtime(); 
         thread_times[tid] = end - start; // Salva quanto tempo essa thread demorou
     }
 
@@ -62,6 +68,7 @@ int main() {
 
     // Mostra quantas threads foram usadas
     std::cout << "Numero de threads utilizadas: " << num_threads << std::endl;
+    
     // return 0:
     // Indica que o programa terminou com sucesso.
     return 0;

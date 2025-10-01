@@ -29,11 +29,8 @@ int main() {
         // Parâmetro: num_threads (inteiro)número de threads desejado
         omp_set_num_threads(num_threads);
 
-        // Escalonamento estático (schedule(static))
-        // Medicao do tempo de execucao para o loop estatico
-        // omp_get_wtime():
         // Função do OpenMP que retorna o tempo atual em segundos
-        double start_static = omp_get_wtime(); // Marca o tempo inicial
+        double start_static = omp_get_wtime(); 
         // #pragma omp parallel for schedule(static):
         // Diretiva do OpenMP que paraleliza o loop for a seguir.
         // - parallel for: divide as iteracoes do loop entre as threads disponiveis
