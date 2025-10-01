@@ -3,37 +3,48 @@
 //a) Faça a versão sequencial.
 //b) Paralelize com #pragma omp parallel for schedule(static).
 //c) Mostre o tempo total de execução em cada versão.
-#include <iostream>
-#include <vector>
-#include <cmath>      // Para pow()
+
+#include <iostream>   // Biblioteca padrão do C++ para entrada e saída
+#include <vector>     // Biblioteca para uso do std::vector (vetores dinâmicos)
+#include <cmath>      // Biblioteca para funções matemáticas
 #include <omp.h>      // Para OpenMP e medição de tempo
 
 int main() {
-    const int N = 1000000; // Tamanho dos vetores
+    // Define o tamanho dos vetores
+    const int N = 1000000;
+
+    // Cria quatro vetores (listas de números):
+    // x, y, z começam cheios de 1.0, 2.0 e 3.0, respectivamente.
+    // "a_seq" e "a_par" vão guardar os resultados.
     std::vector<double> x(N, 1.0), y(N, 2.0), z(N, 3.0), a_seq(N), a_par(N);
 
-    // a) Versão sequencial
-    double start_seq = omp_get_wtime(); // Marca o tempo inicial
+    // Versão sequencial
+    // Marca o tempo antes de começar o cálculo
+    double start_seq = omp_get_wtime();
+    // Calcula para cada posição: x² + y² + z² e guarda em "a_seq"
     for (int i = 0; i < N; ++i) {
-        // Calcula a expressão para cada elemento
         a_seq[i] = pow(x[i], 2) + pow(y[i], 2) + pow(z[i], 2);
     }
-    double end_seq = omp_get_wtime(); // Marca o tempo final
+    // Marca o tempo depois de terminar o cálculo
+    double end_seq = omp_get_wtime();
+    // Calcula quanto tempo demorou
     double tempo_seq = end_seq - start_seq;
 
-    // b) Versão paralela com OpenMP
+    // Versão paralela
     double start_par = omp_get_wtime();
+    // Cada núcleo faz uma parte do trabalho ao mesmo tempo
     #pragma omp parallel for schedule(static)
     for (int i = 0; i < N; ++i) {
-        // Cada thread calcula um bloco de elementos
         a_par[i] = pow(x[i], 2) + pow(y[i], 2) + pow(z[i], 2);
     }
     double end_par = omp_get_wtime();
     double tempo_par = end_par - start_par;
 
-    // c) Mostra o tempo de execução de cada versão
+    // Mostra quanto tempo cada versão demorou
     std::cout << "Tempo sequencial: " << tempo_seq << " segundos" << std::endl;
     std::cout << "Tempo paralelo:   " << tempo_par << " segundos" << std::endl;
-    
+    // return 0:
+    // Indica que o programa terminou com sucesso.
     return 0;
 }
+
